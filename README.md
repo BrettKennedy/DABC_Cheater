@@ -1,2 +1,2 @@
 # DABC_Cheater
-Shh, don't tell the mormons.
+Find the booze.
