@@ -1,11 +1,19 @@
 from bs4 import BeautifulSoup
 import requests
 
-def fetch_stock_information( stock_id ):
+url = "http://www.webapps.abc.utah.gov/Production/OnlineInventoryQuery/IQ/InventoryQuery.aspx"
+def fetch_stock_data( stock_ids ):
+	stock_data = {}
 
-	url = "http://www.webapps.abc.utah.gov/Production/OnlineInventoryQuery/IQ/InventoryQuery.aspx"
-	params = fetch_query_params(url)
-	params["ctl00$ContentPlaceHolderBody$tbCscCode"] = stock_id
+	# only fetch params once, reuse them for all stock queries
+	base_params = fetch_query_params(url)
+	for stock_id in stock_ids:
+		current_params = dict.copy(base_params)
+		current_params["ctl00$ContentPlaceHolderBody$tbCscCode"] = stock_id
+		stock_data[stock_id] = fetch_stock_information(current_params)
+	return stock_data
+
+def fetch_stock_information( params ):
 
 	headers = {
 		"content-type": "application/x-www-form-urlencoded",
@@ -51,7 +59,8 @@ def fetch_query_params( url ):
 	return fetched_params
 
 # print (fetch_stock_information("028236"))
+# print (fetch_stock_information("016906"))
 
 # stock_id "028236" is for Bombay Sapphire 750ml (if I recall correctly)
 # >>> import dabc_request
-# >>> dabc_request.fetch_stock_information("028236")
+# >>> dabc_request.fetch_stock_data(["028236","016906"])
