@@ -7,6 +7,12 @@ def fetch_stock_data( stock_ids ):
 
 	# only fetch params once, reuse them for all stock queries
 	base_params = fetch_query_params(url)
+
+	# If our base_params query failed, return an empty object
+	if len(list(base_params)) == 0:
+		return {}
+
+
 	for stock_id in stock_ids:
 		current_params = dict.copy(base_params)
 		current_params["ctl00$ContentPlaceHolderBody$tbCscCode"] = stock_id
@@ -23,6 +29,10 @@ def fetch_stock_information( params ):
 
 	r = requests.post(url, headers=headers, data=params)
 
+	# If the request fails, return an empty object
+	if (r.status_code != 200):
+		return []
+
 	# need to strip out that first line of the response
 	# It's some ASPX async junk and not valid HTML
 	content_full = r.text
@@ -33,9 +43,18 @@ def fetch_stock_information( params ):
 	stock_locations = []
 
 	soup = BeautifulSoup(str.encode(content), 'html.parser')
-	table = soup.find("table", {"class": "InvGv"}).find_all("tr", {"class": "gridViewRow"})
-	# print (table)
-	for location in table:
+	location_table = soup.find("table", {"class": "InvGv"})
+	
+	if location_table == None:
+		return [];
+
+	location_rows = location_table.find_all("tr", {"class": "gridViewRow"})
+
+	if location_table == None:
+		return [];
+
+	# print (location_rows)
+	for location in location_rows:
 		tds = location.find_all('td')
 		td = []
 		# print ("Loc: ")
@@ -48,6 +67,10 @@ def fetch_stock_information( params ):
 def fetch_query_params( url ):
 	fetched_params = {}
 	r = requests.get(url)
+
+	# If the request fails, return an empty object
+	if (r.status_code != 200):
+		return {}
 
 	soup = BeautifulSoup(r.content, 'html.parser')
 
