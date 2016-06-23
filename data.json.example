@@ -1,0 +1,16 @@
+{
+	"notify_lists": [
+		{
+			"email_addresses": ["user1@example.com"],
+			"items": ["028236"]
+		},
+		{
+			"email_addresses": ["user2@example.com"],
+			"items": ["901527", "028236"]
+		}
+	],
+	"gmail_smtp_credentials": {
+		"username": "user@gmail.com",
+		"password": "passwerd"
+	}
+}
