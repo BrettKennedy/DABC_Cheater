@@ -35,7 +35,8 @@ def fetch_stock_information( params ):
 
 	# need to strip out that first line of the response
 	# It's some ASPX async junk and not valid HTML
-	content_full = r.text
+	content_full = str(r.text)
+
 	content_list = content_full.split('\n')
 	content_list.pop(0)
 	content = ''.join(content_list)
@@ -80,6 +81,11 @@ def fetch_query_params( url ):
 	fetched_params['__ASYNCPOST'] = 'true'
 
 	return fetched_params
+
+def write_to_file(txt) :
+	file = open('output.txt', 'w')
+	file.write(txt)
+	file.close()
 
 # print (fetch_stock_information("028236"))
 # print (fetch_stock_information("016906"))
