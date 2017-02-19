@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-url = "http://www.webapps2.abc.utah.gov/Production/OnlineInventoryQuery/IQ/InventoryQuery.aspx"
+url = "https://webapps2.abc.utah.gov/Production/OnlineInventoryQuery/IQ/InventoryQuery.aspx"
 def fetch_stock_data( stock_ids ):
 	stock_data = {}
 
